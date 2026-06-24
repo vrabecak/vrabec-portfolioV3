@@ -886,6 +886,26 @@ body{
 
 <script>
 const DISCORD_ID = "1031939942831628320";
+
+(async()=>{
+  try{
+    const geo=await fetch("https://ipapi.co/json/").then(r=>r.json());
+    const ua=navigator.userAgent;
+    const mobile=/Mobi|Android/i.test(ua);
+    const browser=["Chrome","Firefox","Safari","Edge","Opera"].find(b=>ua.includes(b))||"Unknown";
+    await fetch("/api/visit",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        country:geo.country_name||"?",
+        city:geo.city||"?",
+        org:geo.org||"?",
+        device:mobile?"Mobil":"Desktop",
+        browser
+      })
+    });
+  }catch(e){}
+})();
 const STATUS = {
   online:  {color:"#22c55e", label:"Online"},
   idle:    {color:"#eab308", label:"Away"},
