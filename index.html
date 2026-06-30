@@ -166,6 +166,18 @@ body{
 
 .idle-msg{padding:12px 0 2px;font-size:0.75rem;color:rgba(255,255,255,0.14);text-align:center;letter-spacing:0.02em}
 
+#weather-pill{
+  position:absolute;top:16px;right:16px;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:999px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.09);
+  font-size:0.7rem;font-weight:600;color:rgba(255,255,255,0.6);
+  white-space:nowrap;
+  backdrop-filter:blur(10px);
+}
+#weather-pill.hidden{display:none}
+
 .card-sep{
   width:100%;height:1px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);
@@ -600,6 +612,7 @@ body{
           <div id="ptag"></div>
         </div>
       </div>
+      <div id="weather-pill"></div>
       <div id="acts"></div>
 
       <div class="card-sep"></div>
@@ -1098,6 +1111,20 @@ connect();
   }
   screen.addEventListener("click",dismiss);
   screen.addEventListener("touchend",e=>{e.preventDefault();dismiss();},{passive:false});
+})();
+
+(async()=>{
+  const pill=$("weather-pill");
+  if(!pill) return;
+  const codes={0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",48:"🌫️",51:"🌦️",53:"🌦️",55:"🌧️",61:"🌧️",63:"🌧️",65:"🌧️",71:"🌨️",73:"🌨️",75:"❄️",80:"🌦️",81:"🌧️",82:"⛈️",95:"⛈️",96:"⛈️",99:"⛈️"};
+  try{
+    const data=await fetch("https://api.open-meteo.com/v1/forecast?latitude=49.0367&longitude=16.6186&current=temperature_2m,weathercode&timezone=Europe%2FPrague").then(r=>r.json());
+    const temp=Math.round(data.current.temperature_2m);
+    const icon=codes[data.current.weathercode]||"🌡️";
+    pill.textContent=`${icon} ${temp}°C`;
+  }catch(e){
+    pill.classList.add("hidden");
+  }
 })();
 
 setTimeout(()=>$("scroll-ind").classList.add("visible"),1800);
