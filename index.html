@@ -1188,7 +1188,11 @@ const sectionObserver=new IntersectionObserver(entries=>{
 },{threshold:0.45});
 sections.forEach(s=>sectionObserver.observe(s));
 
-setTimeout(()=>animateSection(0,1),100);
+const initIdx=sectionArr.findIndex(s=>{
+  const r=s.getBoundingClientRect();
+  return r.top<=window.innerHeight/2&&r.bottom>window.innerHeight/2;
+});
+setTimeout(()=>animateSection(Math.max(0,initIdx),1),100);
 
 (function(){
   const KEY  = "53c767de1422b16575a82dd00b73f466";
