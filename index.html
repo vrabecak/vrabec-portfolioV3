@@ -1158,6 +1158,20 @@ function render(d){
   if(!html&&!d.listening_to_spotify) html=`<div class="idle-msg">Not doing anything right now</div>`;
   $("acts").innerHTML=html;
 }
+(async()=>{
+  try{
+    const r=await fetch("https://api.lanyard.rest/v1/users/"+DISCORD_ID).then(x=>x.json());
+    if(!r.success){
+      $("pname").textContent="vrabec";
+      $("phandle").textContent="@vrabec";
+      $("av-img").innerHTML='<div style="width:100%;height:100%;background:linear-gradient(135deg,#7c3aed,#db2777)"></div>';
+      $("av-dot").style.background="#4b5563";
+      $("ptag").innerHTML='<div class="status-tag" style="background:#4b556316;color:#9ca3af;border:1px solid #4b556326"><span class="pip" style="background:#4b5563"></span>Offline</div>';
+      $("acts").innerHTML="";
+    }
+  }catch(e){}
+})();
+
 function connect(){
   const ws=new WebSocket("wss://api.lanyard.rest/socket");
   let hb;
