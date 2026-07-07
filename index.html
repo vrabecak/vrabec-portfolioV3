@@ -395,19 +395,26 @@ body{
 }
 
 .scroll-indicator{
-  position:absolute;bottom:26px;left:50%;
+  position:absolute;bottom:20px;left:50%;
   transform:translateX(-50%);
+  width:76px;height:76px;
   opacity:0;transition:opacity 0.8s;
-  pointer-events:none;
+  cursor:pointer;
 }
 .scroll-indicator.visible{opacity:1}
-.scroll-line{width:1px;height:36px;background:rgba(255,255,255,0.08);position:relative;overflow:hidden}
-.scroll-line i{
-  position:absolute;left:0;top:-45%;width:100%;height:45%;
-  background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.6));
-  animation:scrollPulse 1.9s cubic-bezier(0.4,0,0.2,1) infinite;
+.scroll-ring{display:block;width:100%;height:100%;animation:spinSlow 14s linear infinite}
+.scroll-indicator:hover .scroll-ring{animation-duration:5s}
+.scroll-ring text{
+  fill:rgba(255,255,255,0.3);
+  font-family:'Inter',sans-serif;font-size:10px;font-weight:600;
 }
-@keyframes scrollPulse{0%{top:-45%}65%,100%{top:100%}}
+.scroll-arrow{
+  position:absolute;top:50%;left:50%;
+  width:13px;height:13px;margin:-6.5px 0 0 -6.5px;
+  color:rgba(255,255,255,0.45);
+  animation:arrowNudge 2.2s ease-in-out infinite;
+}
+@keyframes arrowNudge{0%,100%{transform:translateY(-2px);opacity:0.5}50%{transform:translateY(2px);opacity:1}}
 
 .section-nav{
   position:fixed;right:18px;top:50%;transform:translateY(-50%);
@@ -720,7 +727,7 @@ body{
 
   #reveal-text{font-size:clamp(2.4rem,11vw,3.2rem)}
   #reveal-hint{font-size:0.65rem}
-  .scroll-indicator{bottom:18px}
+  .scroll-indicator{bottom:12px;width:62px;height:62px}
 
   .sec-head{padding:64px 18px 40px}
   .sec-sub{font-size:0.72rem}
@@ -849,8 +856,12 @@ body{
     </a>
   </div>
 
-  <div class="scroll-indicator" id="scroll-ind">
-    <div class="scroll-line"><i></i></div>
+  <div class="scroll-indicator" id="scroll-ind" title="scroll down">
+    <svg class="scroll-ring" viewBox="0 0 80 80">
+      <defs><path id="scroll-circ" d="M40,40 m-28,0 a28,28 0 1,1 56,0 a28,28 0 1,1 -56,0"/></defs>
+      <text><textPath href="#scroll-circ" textLength="175" lengthAdjust="spacingAndGlyphs">scroll down · scroll down ·&#160;</textPath></text>
+    </svg>
+    <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 13l7 7 7-7"/></svg>
   </div>
 </section>
 
@@ -1291,6 +1302,9 @@ connect();
 })();
 
 setTimeout(()=>$("scroll-ind").classList.add("visible"),1800);
+$("scroll-ind").addEventListener("click",()=>{
+  document.querySelector(".sec-head").scrollIntoView({behavior:"smooth"});
+});
 
 const navDots=document.querySelectorAll(".nav-dot");
 const anchors=["s0","s1","s5","s2","s3","s4"].map(id=>document.getElementById(id));
@@ -1436,7 +1450,7 @@ onScrollFrame();
   document.documentElement.addEventListener("mouseleave",()=>{dot.style.opacity="0";ring.style.opacity="0";});
   addEventListener("mousedown",()=>down=true);
   addEventListener("mouseup",()=>down=false);
-  const HOV="a,button,.nav-dot,.soc,.top-btn,#card-profile";
+  const HOV="a,button,.nav-dot,.soc,.top-btn,#card-profile,#scroll-ind";
   document.addEventListener("mouseover",e=>{
     hov=!!e.target.closest(HOV);
     ring.classList.toggle("hover",hov);
