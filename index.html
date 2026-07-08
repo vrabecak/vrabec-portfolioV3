@@ -1237,7 +1237,10 @@ connect();
     "Wanna have this cool portfolio? Dm me on discord.",
   ];
 
+  let showId=0,hideTimer=null;
   function show(text){
+    const id=++showId;
+    if(hideTimer){clearTimeout(hideTimer);hideTimer=null;}
     let i=0;
     const cursor=document.createElement("span");
     cursor.id="notif-cursor";
@@ -1247,14 +1250,16 @@ connect();
     notif.classList.add("show");
 
     function type(){
+      if(id!==showId) return;
       msgEl.textContent=text.slice(0,i);
       msgEl.appendChild(cursor);
       if(i<text.length){
         i++;
         setTimeout(type,55+Math.random()*38);
       } else {
-        setTimeout(()=>cursor.remove(),500);
-        setTimeout(()=>{
+        setTimeout(()=>{if(id===showId)cursor.remove();},500);
+        hideTimer=setTimeout(()=>{
+          if(id!==showId) return;
           notif.classList.remove("show");
           notif.classList.add("hide");
         }, Math.max(2200, text.length*40));
@@ -1262,6 +1267,7 @@ connect();
     }
     setTimeout(type,380);
   }
+  window.showNotif=show;
 
   messages.forEach((text,i)=>setTimeout(()=>show(text), 3000+i*10000));
 })();
@@ -1464,6 +1470,29 @@ onScrollFrame();
     ring.style.transform=`translate(-50%,-50%) scale(${cur.toFixed(3)})`;
     requestAnimationFrame(loop);
   })();
+})();
+
+(function(){
+  const dc=document.querySelector(".soc-dc");
+  if(!dc) return;
+  function fallbackCopy(t){
+    const ta=document.createElement("textarea");
+    ta.value=t;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);
+    ta.select();
+    try{document.execCommand("copy");}catch(e){}
+    ta.remove();
+  }
+  dc.addEventListener("click",e=>{
+    e.preventDefault();
+    const name=".vrabec.";
+    const done=()=>{if(window.showNotif)showNotif("My username "+name+" copied to your clipboard ;)");};
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(name).then(done,()=>{fallbackCopy(name);done();});
+    } else {
+      fallbackCopy(name);done();
+    }
+  });
 })();
 
 document.querySelectorAll(".soc").forEach(el=>{
