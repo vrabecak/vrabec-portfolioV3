@@ -1,0 +1,21 @@
+.DS_Store
+node_modules/
+.vercel
+*.log
+.env
+.env.local
+.claude/
+.next/
+next-env.d.ts
+
+# local backups (kept on disk, never published)
+index.backup*.html
+
+# leftovers from an abandoned next.js attempt (unused, not part of the site)
+package.json
+package-lock.json
+next.config.mjs
+tsconfig.json
+.babelrc
+postcss.config.mjs
+tailwind.config.ts
