@@ -1346,15 +1346,11 @@
           top: 18px;
           right: 18px;
         }
-        .hud-bl {
-          bottom: 18px;
-          left: 18px;
-        }
-        .hud-br {
-          bottom: 18px;
-          right: 18px;
-        }
-        .hud-tc {
+        .hud-tc,
+        .hud-bl,
+        .hud-br,
+        .c-bl,
+        .c-br {
           display: none;
         }
 
@@ -1387,8 +1383,13 @@
           margin-left: auto;
         }
         .scrollhint {
-          margin-top: 34px;
+          margin-top: 36px;
           font-size: 10px;
+          letter-spacing: 0.12em;
+          justify-content: center;
+          text-align: center;
+          flex-wrap: wrap;
+          gap: 8px;
         }
 
         .about-grid {
