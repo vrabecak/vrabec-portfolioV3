@@ -95,6 +95,9 @@
       #boot-out .ok {
         color: #22c55e;
       }
+      #boot-out .fail {
+        color: #f59e0b;
+      }
       #boot-hint {
         margin-top: 18px;
         font-size: 11px;
@@ -1720,45 +1723,87 @@
         const boot = $("#boot"),
           out = $("#boot-out"),
           hint = $("#boot-hint");
-        const lines = [
-          "> vrabec.exe v3.1",
-          "> loading interface .......... ok",
-          "> lanyard uplink ............. ok",
-          "> last.fm scrobbler .......... ok",
-          "> guestbook .................. ok",
-          "> ready_",
+
+        function wait(ms) {
+          return new Promise((r) => setTimeout(r, ms));
+        }
+        function checkService(promise) {
+          return Promise.race([
+            promise.then(() => true).catch(() => false),
+            wait(2500).then(() => false),
+          ]);
+        }
+
+        const lanyardOk = checkService(
+          fetch("https://api.lanyard.rest/v1/users/" + DISCORD_ID)
+            .then((r) => r.json())
+            .then((d) => {
+              if (!d.success) throw new Error();
+            }),
+        );
+        const lastfmOk = checkService(
+          fetch("/api/lastfm")
+            .then((r) => r.json())
+            .then((d) => {
+              if (!d.recenttracks) throw new Error();
+            }),
+        );
+        const guestbookOk = checkService(
+          fetch(GB_URL + ".json?shallow=true").then((r) => {
+            if (!r.ok) throw new Error();
+          }),
+        );
+
+        const steps = [
+          { label: "> vrabec.exe v3.1" },
+          { label: "> loading interface", check: Promise.resolve(true) },
+          { label: "> lanyard uplink", check: lanyardOk },
+          { label: "> last.fm scrobbler", check: lastfmOk },
+          { label: "> guestbook", check: guestbookOk },
+          { label: "> ready_" },
         ];
-        let li = 0,
-          ci = 0,
-          done = false,
-          gone = false;
-        const cur = '<span id="boot-cursor"></span>';
-        function draw(partial) {
-          out.innerHTML =
-            (lines.slice(0, li).join("\n") + (li ? "\n" : "") + partial).replace(
-              / ok$/gm,
-              ' <span class="ok">ok</span>',
-            ) + cur;
+
+        let gone = false;
+        const cursor = '<span id="boot-cursor"></span>';
+        const printed = [];
+
+        function show(current) {
+          const all = current == null ? printed : printed.concat(current);
+          out.innerHTML = all.join("\n") + cursor;
         }
-        function type() {
-          if (gone) return;
-          if (li >= lines.length) {
-            done = true;
-            hint.classList.add("on");
-            return;
-          }
-          const l = lines[li];
-          if (ci <= l.length) {
-            draw(l.slice(0, ci));
-            ci += 2;
-            setTimeout(type, 16);
-          } else {
-            li++;
-            ci = 0;
-            setTimeout(type, 110);
-          }
+        function dotFill(label) {
+          return label + " " + ".".repeat(Math.max(3, 30 - label.length)) + " ";
         }
-        type();
+
+        async function run() {
+          for (const step of steps) {
+            if (gone) return;
+            for (let i = 2; i < step.label.length + 2; i += 2) {
+              if (gone) return;
+              show(step.label.slice(0, i));
+              await wait(16);
+            }
+            if (step.check) {
+              const line = dotFill(step.label);
+              show(line);
+              const ok = await step.check;
+              if (gone) return;
+              printed.push(
+                line +
+                  (ok
+                    ? '<span class="ok">ok</span>'
+                    : '<span class="fail">offline</span>'),
+              );
+            } else {
+              printed.push(step.label);
+            }
+            show(null);
+            await wait(110);
+          }
+          if (!gone) hint.classList.add("on");
+        }
+        run();
+
         function go() {
           if (gone) return;
           gone = true;
