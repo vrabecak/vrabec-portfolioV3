@@ -426,11 +426,6 @@
       .wordmark:hover .wm-l {
         background-position: 100% 50%;
       }
-      @keyframes shimmer {
-        to {
-          background-position: 260% 50%;
-        }
-      }
       .tagline {
         margin-top: 16px;
         font-size: 14px;
@@ -614,18 +609,10 @@
         font-size: clamp(1.9rem, 5vw, 3rem);
         font-weight: 700;
         letter-spacing: -0.03em;
-        background: linear-gradient(
-          100deg,
-          #fff 20%,
-          var(--pink) 55%,
-          var(--purple) 80%,
-          #fff 100%
-        );
-        background-size: 250% 100%;
+        background: linear-gradient(100deg, #fff 30%, var(--pink) 70%, var(--purple) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        animation: shimmer 7s linear infinite;
       }
       .shead .cnt {
         font-size: 12px;
@@ -1320,61 +1307,145 @@
       }
 
       @media (max-width: 640px) {
+        .wrap {
+          padding: 0 18px;
+        }
+        section.block {
+          padding: 52px 0;
+        }
+        .shead {
+          margin-bottom: 24px;
+          gap: 12px;
+        }
+        #glow {
+          display: none;
+        }
+        .bg {
+          animation: none;
+        }
+        .grain {
+          animation: none;
+        }
+        .orb4 {
+          display: none;
+        }
+        .corner {
+          width: 15px;
+          height: 15px;
+        }
         .hud-tl,
         .hud-bl,
         .hud-br {
           font-size: 10px;
         }
+        .hud-tl {
+          top: 18px;
+          left: 18px;
+        }
+        .hud-tr {
+          top: 18px;
+          right: 18px;
+        }
+        .hud-bl {
+          bottom: 18px;
+          left: 18px;
+        }
+        .hud-br {
+          bottom: 18px;
+          right: 18px;
+        }
         .hud-tc {
           display: none;
         }
+
+        .eyebrow {
+          margin-bottom: 14px;
+          font-size: 11px;
+        }
+        .tagline {
+          font-size: 13px;
+        }
         .menu {
-          margin-top: 38px;
+          margin-top: 30px;
+          gap: 4px;
+        }
+        .mi {
+          padding: 13px 16px;
         }
         .mi-name {
-          font-size: 1.25rem;
+          font-size: 1.3rem;
         }
         .mi-desc {
           display: none;
         }
+        .mi-arrow {
+          opacity: 1;
+          transform: none;
+          margin-left: auto;
+        }
+        .scrollhint {
+          margin-top: 34px;
+          font-size: 10px;
+        }
+
         .about-grid {
           grid-template-columns: 1fr;
-          gap: 24px;
+          gap: 20px;
         }
         .facts {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr 1fr;
+        }
+        .fact {
+          padding: 13px 14px;
         }
         .work {
           grid-template-columns: 1fr;
         }
+        .wcard.soon {
+          display: none;
+        }
         .stack-grid {
           grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
+          gap: 9px;
         }
         .tile {
-          padding: 16px 15px 18px;
+          padding: 15px 14px 16px;
         }
         .tile-name {
+          font-size: 0.92rem;
+        }
+        .tile-pct {
           font-size: 0.95rem;
         }
         .panel {
-          padding: 22px;
+          padding: 20px 18px;
+          border-radius: 16px;
         }
-        #glow {
-          display: none;
-        }
+
         .np {
           flex-wrap: wrap;
         }
         .np-eq {
           display: none;
         }
-        #gb-name {
+
+        .gb-form {
+          gap: 8px;
+        }
+        #gb-name,
+        #gb-msg {
           width: 100%;
         }
         .gb-btn {
-          padding: 12px 24px;
+          padding: 13px 24px;
           width: 100%;
+        }
+        .gb-list {
+          max-height: 380px;
+        }
+
+        footer {
+          padding: 40px 0 70px;
         }
       }
     </style>
