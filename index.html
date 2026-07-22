@@ -42,6 +42,7 @@
         font-size: 15px;
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
         overflow-x: hidden;
       }
       body.locked {
@@ -274,6 +275,7 @@
       .hud-tl {
         top: 22px;
         left: 26px;
+        cursor: pointer;
       }
       .hud-tc {
         top: 22px;
@@ -1306,9 +1308,16 @@
         color: var(--pink);
       }
 
+      .dock {
+        display: none;
+      }
+
       @media (max-width: 640px) {
         .wrap {
           padding: 0 18px;
+        }
+        section.block {
+          scroll-margin-top: 14px;
         }
         section.block {
           padding: 52px 0;
@@ -1436,20 +1445,99 @@
         .gb-form {
           gap: 8px;
         }
+        .gb-in {
+          font-size: 16px;
+          padding: 12px 14px;
+        }
         #gb-name,
         #gb-msg {
           width: 100%;
         }
         .gb-btn {
-          padding: 13px 24px;
+          padding: 14px 24px;
           width: 100%;
         }
         .gb-list {
-          max-height: 380px;
+          max-height: 420px;
+        }
+
+        .hero {
+          padding-bottom: 90px;
+        }
+        .np-art {
+          width: 64px;
+          height: 64px;
+        }
+        .np-track {
+          font-size: 1.15rem;
+        }
+
+        .mi:hover {
+          background: none;
+          border-color: transparent;
+          padding-left: 16px;
+        }
+        .mi:active {
+          background: rgba(255, 255, 255, 0.05);
+          transform: scale(0.98);
+        }
+        .soc:hover {
+          padding-left: 6px;
+        }
+        .soc:active {
+          background: rgba(255, 255, 255, 0.04);
+        }
+        .tile:active,
+        .wcard:active {
+          transform: scale(0.98);
+        }
+        .gb-btn:active,
+        .gb-like:active {
+          transform: scale(0.95);
         }
 
         footer {
-          padding: 40px 0 70px;
+          padding: 40px 0 120px;
+        }
+
+        .dock {
+          display: flex;
+          position: fixed;
+          left: 10px;
+          right: 10px;
+          bottom: 10px;
+          z-index: 90;
+          background: rgba(13, 11, 18, 0.82);
+          border: 1px solid var(--line-lit);
+          border-radius: 18px;
+          backdrop-filter: blur(22px);
+          -webkit-backdrop-filter: blur(22px);
+          box-shadow: 0 10px 34px rgba(0, 0, 0, 0.55);
+          padding: 7px 4px 6px;
+        }
+        .dock a {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 3px;
+          padding: 5px 0 4px;
+          border-radius: 12px;
+          color: var(--dim);
+          font-size: 8.5px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          transition: color 0.25s;
+        }
+        .dock a svg {
+          width: 19px;
+          height: 19px;
+        }
+        .dock a.on {
+          color: var(--pink);
+        }
+        .dock a:active {
+          background: rgba(255, 255, 255, 0.06);
         }
       }
     </style>
@@ -1794,6 +1882,51 @@
       </div>
     </footer>
 
+    <nav class="dock">
+      <a href="#about">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+        </svg>
+        about
+      </a>
+      <a href="#stack">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2 2 7l10 5 10-5-10-5z" />
+          <path d="m2 12 10 5 10-5" />
+          <path d="m2 17 10 5 10-5" />
+        </svg>
+        stack
+      </a>
+      <a href="#work">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg>
+        work
+      </a>
+      <a href="#music">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="16" r="3" />
+        </svg>
+        music
+      </a>
+      <a href="#guestbook">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        chat
+      </a>
+      <a href="#connect">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
+          <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
+        </svg>
+        links
+      </a>
+    </nav>
+
     <script>
       const $ = (s) => document.querySelector(s);
       const DISCORD_ID = "1031939942831628320";
@@ -1804,6 +1937,8 @@
         const boot = $("#boot"),
           out = $("#boot-out"),
           hint = $("#boot-hint");
+
+        if ("ontouchstart" in window) hint.textContent = "tap anywhere to enter";
 
         function wait(ms) {
           return new Promise((r) => setTimeout(r, ms));
@@ -2378,6 +2513,29 @@
         load();
         if (!demo) setInterval(load, 20000);
       })();
+
+      const dockLinks = document.querySelectorAll(".dock a");
+      const dockSections = [];
+      dockLinks.forEach(function (link) {
+        dockSections.push(document.querySelector(link.getAttribute("href")));
+      });
+      function updateDock() {
+        let current = -1;
+        for (let i = 0; i < dockSections.length; i++) {
+          if (dockSections[i].getBoundingClientRect().top < window.innerHeight * 0.35) {
+            current = i;
+          }
+        }
+        dockLinks.forEach(function (link, i) {
+          link.classList.toggle("on", i === current);
+        });
+      }
+      window.addEventListener("scroll", updateDock, { passive: true });
+      updateDock();
+
+      document.querySelector(".hud-tl").addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     </script>
   </body>
 </html>
